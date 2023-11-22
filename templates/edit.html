@@ -1,0 +1,379 @@
+{% extends 'layout/app.html' %}
+
+{% load static %}
+{% block stylesheet %}
+    <style>
+        .bd-example {
+            padding: 1.5rem;
+            margin-right: 0;
+            margin-left: 0;
+            border-width: 1px;
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+        }
+        .bd-example {
+            position: relative;
+            padding: 1rem;
+            margin: 1rem -.75rem 0;
+            border: solid #dee2e6;
+            border-width: 1px;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Patient</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+            <li class="breadcrumb-item active">Edit {{ patients.firstname }}</li>
+        </ol>
+        <div class="bd-example">
+           
+
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Patient Summary
+                    </button>
+                  </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <form action="update/{{ patients.id }}" method="POST">
+                            {% csrf_token %}
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <div class="form-floating mb-3 mb-md-0">
+                                        <input class="form-control" id="inputFirstName" type="text" value="{{ patients.firstname }}" name="firstname" placeholder="Enter your first name"/>
+                                        <label for="inputFirstName">Enter First name</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-floating">
+                                        <input class="form-control" id="inputLastName" type="text" value="{{ patients.lastname }}" name="lastname" placeholder="Enter your last name"/>
+                                        <label for="inputLastName">Enter Last name</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <div class="form-floating mb-3 mb-md-0">
+                                        <input class="form-control" name="description" type="text"  value="{{ patients.address }}" placeholder="Description" id="inputdescription" required>
+                                        <label for="inputdescription">Enter Address</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-floating">
+                                        <input class="form-control" name="mobile_number"  type="tel" value="{{ patients.mobile_number }}" placeholder="Mobile Number" id="inputMobile">
+                                        <label for="inputMobile">Enter Mobile Number</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <div class="form-floating mb-3 mb-md-0">
+                                        <input class="form-control" type="date" name="date" value="{{ patients.date }}" id="dateInput">
+                                        <label for="dateInput">Enter Date of birth</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-floating">
+                                        <input type="text" name="address" id="inputLocation" value="{{ patients.address }}" class="form-control" placeholder="Enter Address" required="">
+                                        <label for="inputLocation">Enter Address</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 mb-0">
+                                <div class="d-grid"><button class="btn btn-primary btn-block" type="submit">Submit</button></div>
+                            </div>
+                        </form>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                      Prescription
+                    </button>
+                  </h2>
+                  <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                            </div>
+                            <div class="card-body">
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                                <div class="bd-example">
+                                    <form id="example-form" action="prescription" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" class="form-control" name="patient_id"  id="patient_id" value="{{patients.id }}" placeholder="Description" id="inputFirst" required>
+
+                                        <div class="row mb-3">
+                                            
+                                            <div class="col">
+                                                <div class="form-floating">
+                                                    <input type="text" class="form-control" name="medication"  id="medication" placeholder="medication" id="example-search-input" required>
+                                                    <label for="example-search-input">Medication</label>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-floating">
+                                                    <input type="text" class="form-control" placeholder="Dosage" id="dosage" name="dosage">
+                                                    <label for="example-tel-input">Dosage</label>
+                                                </div>
+                                            </div>
+                
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col">
+                                                <div class="form-floating mb-3 mb-md-0">
+                                                    <select class="form-select" aria-label="Default select example" id="frequency" name="frequency">
+                                                        <option value="Once Daily">Once daily</option>
+                                                        <option value="Twice Daily">Twice Daily</option>
+                                                        <option value="Thrice Daily">Thrice Daily</option>
+                                                      </select>
+                                                    <label for="inputdescription">Frequency</label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col">
+                                                <div class="form-floating mb-3 mb-md-0">
+                                                    <input class="form-control" type="text" id="notes"  name="notes" placeholder="Text" required>
+                                                    <label for="example-text-input">Notes</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col">
+                                                <div class="col">
+                                                    <div class="col">
+                                                        <div class="form-floating mb-3 mb-md-0">
+                                                            <input class="form-control" type="date" name="review_date" value="2018-08-19" id="review_date">
+                                                            <label for="review_date">Date of Review</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <button class="btn btn-primary btn-block" type="submit">Submit &nbsp;&nbsp;&nbsp;<span></span></button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Prescription List
+                            </div>
+                            <div class="card-body">
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                                <table class="table table-bordered" id="myTable" width="100%" cellspacing="0">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Medication</th>
+                                        <th>Dosage</th>
+                                        <th>Frequency</th>
+                                        <th>Next Review Date</th>
+                                        <th>Notes</th>
+                                        <th>Created At</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for prescription in prescription_list %}
+                                        <tr id="table-{{ prescription.id }}">
+                                            <td>{{ prescription.id }}</td>
+                                            <td>{{ prescription.medication }}</td>
+                                            <td>{{ prescription.dosage }}</td>
+                                            <td>{{ prescription.frequency }}</td>
+                                            <td>{{ prescription.expiration_at }}</td>
+                                            <td>{{ prescription.text }}</td>
+                                            <td>{{ prescription.created_at  |date:"d-m-Y H:i:s" }}</td>
+                                            <td><a class="btn btn-sm btn-warning"><span class="fa fa-edit"></span> Edit</a>
+                                                <a class="btn btn-sm btn-danger delete" data-id="{{ prescription.id }}">
+                                                    <span class="fa fa-trash"></span> Delete
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+               
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFour">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                       Support Documents
+                      </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                      <div class="accordion-body">
+
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                File Upload
+                            </div>
+                            <div class="card-body">
+                                <form action="fileupload" class="form-horizontal" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <input type="hidden" class="form-control" name="patient_id"  id="patient_id" value="{{patients.id }}" placeholder="Description" id="inputFirst" required>
+
+                                        <div class="col-6">
+                                            <div class="input-group mb-3">
+                                                <input type="file" class="form-control custom-file-input file" name="myfile" id="fileInput">
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="input-group mb-3">
+                                                <input type="text" class="form-control" name="description" placeholder="Description" id="inputFirst" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="input-group mb-3">
+                                                <button class="btn btn-primary btn-block" type="submit">Submit &nbsp;&nbsp;&nbsp;<span></span></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                File List
+                            </div>
+                            <div class="card-body">
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Description</th>
+                                        <th>File Name</th>
+                                        <th>Created At</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for document in documents %}
+                                        <tr>
+                                            <td>{{ document.id }}</td>
+                                            <td>{{ document.description }}</td>
+                                            <td>{{ document.document }}</td>
+                                            <td>{{ document.uploaded_at }}</td>
+                                            <td>
+                                                <a class="btn btn-sm btn-danger" href="deleteFile/{{ document.id }}/{{patients.id }}"><span class="fa fa-trash"></span>&nbsp;Delete</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascript %}
+<script>
+    $(document).ready(function () {
+        $('#example-form').submit(function (event) {
+            var text = $('#notes').val();
+            var medication = $('#medication').val();
+            var dosage = $('#dosage').val();
+            var frequency = $('#frequency').val();
+            var review_date = $('#review_date').val();
+            var patient_id = $('#patient_id').val();
+
+            $.ajax({
+                type: 'POST',
+                url: 'prescription',
+                data: {
+                    'csrfmiddlewaretoken': '{{csrf_token}}',
+                    'text': text,
+                    'medication': medication,
+                    'dosage': dosage,
+                    'frequency': frequency,
+                    'review_date': review_date,
+                    'patient_id': patient_id
+                },
+                dataType: 'json',
+                encode: true
+            })
+                .done(function (data) {
+                    $("#example-form").trigger("reset");
+                    $.get('getprescription', function (response) {
+
+                    })
+                        .done(function (datas) {
+                            $("#myTable > tbody").prepend(
+                                `
+                                <tr id='table-${datas.id}'>
+                                    <td>${datas.id}</td>
+                                    <td>${datas.medication}</td>
+                                    <td>${datas.dosage}</td>
+                                    <td>${datas.frequency}</td>
+                                    <td>${datas.expiration_at }</td>
+                                    <td>${datas.text}</td>
+                                    <td>${datas.created_at}</td>
+                                    <td>
+                                        <a class='btn btn-sm btn-warning'>
+                                            <span class='fa fa-edit'></span>Edit
+                                        </a>
+                                        <a class='btn btn-sm btn-danger delete' data-id='${datas.id}'>
+                                            <span class='fa fa-trash'></span>Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                                `
+                            );
+                        })
+                        .fail(function () {
+                            $("#fails").show();
+                        })
+                });
+
+            event.preventDefault();
+        });
+        $(document).on('click', '.delete', function (event) {
+            console.log('deleted');
+            var id = $(this).attr("data-id");
+            $.get('delete', {id: id}, function (response) {
+                var tabrow = '#table-' + id;
+                $(tabrow).remove();
+            });
+        });
+    });
+    $(document).on('change', '.file', function (event) {
+        document.getElementById('fileLabel').innerHTML = event.target.files[0].name;
+    });
+</script>
+{% endblock %}
