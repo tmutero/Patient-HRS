@@ -13,7 +13,7 @@
 ``` 
  1. git clone https://github.com/tmutero/Patient-HRS.git
 
- 2.  cd django-crud-ajax-login-register-fileupload
+ 2.  cd to folder
 
  3. pip3 install -r requirements.txt
 
